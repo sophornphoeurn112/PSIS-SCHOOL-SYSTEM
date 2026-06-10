@@ -16,6 +16,15 @@ function StudentManagement() {
   };
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
+  const [selectedGrade, setSelectedGrade] = useState("All");
+
+  const countByGrade = (grade) =>
+    students.filter((student) => student.studentClass === grade).length;
+
+  const visibleStudents =
+    selectedGrade === "All"
+      ? students
+      : students.filter((student) => student.studentClass === selectedGrade);
   const [newStudent, setNewStudent] = useState({
     schoolId: "",
     name: "",
@@ -88,6 +97,7 @@ function StudentManagement() {
           `Student created!\nUsername: ${student.username}\nTemporary Password: ${student.password}`,
         );
       }
+      setSelectedGrade(newStudent.studentClass || "All");
       resetStudentForm();
     }
   };
@@ -266,7 +276,40 @@ function StudentManagement() {
         </form>
       )}
 
+      <div className="grade-filter">
+        <button
+          type="button"
+          className={`grade-box ${selectedGrade === "All" ? "active" : ""}`}
+          onClick={() => setSelectedGrade("All")}
+        >
+          <span className="grade-box-label">All Grades</span>
+          <span className="grade-box-count">{students.length}</span>
+        </button>
+        {GRADE_OPTIONS.map((grade) => (
+          <button
+            type="button"
+            key={grade}
+            className={`grade-box ${selectedGrade === grade ? "active" : ""}`}
+            onClick={() => setSelectedGrade(grade)}
+          >
+            <span className="grade-box-label">{grade}</span>
+            <span className="grade-box-count">{countByGrade(grade)}</span>
+          </button>
+        ))}
+      </div>
+
+      <h3 className="grade-heading">
+        {selectedGrade === "All" ? "All Students" : `${selectedGrade} Students`}{" "}
+        ({visibleStudents.length})
+      </h3>
+
       <div className="table-container">
+        {visibleStudents.length === 0 ? (
+          <p className="grade-empty">
+            No students in {selectedGrade === "All" ? "the system" : selectedGrade}{" "}
+            yet. Use “+ Create Student Account” to add one.
+          </p>
+        ) : (
         <table>
           <thead>
             <tr>
@@ -284,7 +327,7 @@ function StudentManagement() {
             </tr>
           </thead>
           <tbody>
-            {students.map((student) => (
+            {visibleStudents.map((student) => (
               <tr key={student.id}>
                 <td>{student.schoolId || "—"}</td>
                 <td>{student.name}</td>
@@ -324,6 +367,7 @@ function StudentManagement() {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   );
