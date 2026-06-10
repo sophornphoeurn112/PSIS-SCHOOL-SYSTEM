@@ -1,35 +1,15 @@
 import React, { useState } from "react";
+import { getStudents, saveStudents } from "../../services/localStore";
 import "./AdminManagement.css";
 
 function StudentManagement() {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      schoolId: "STD001",
-      name: "Ali Ahmed",
-      nameKhmer: "អាលី អាហិមេត",
-      username: "ali123",
-      gender: "Male",
-      dateOfBirth: "2008-06-12",
-      dateJoined: "2022-09-01",
-      phone: "0123456789",
-      password: "Welcome@123",
-      status: "active",
-    },
-    {
-      id: 2,
-      schoolId: "STD002",
-      name: "Fatima Khan",
-      nameKhmer: "ហ្វាទីមា ខាន",
-      username: "fatima456",
-      gender: "Female",
-      dateOfBirth: "2009-03-22",
-      dateJoined: "2023-01-15",
-      phone: "0987654321",
-      password: "Welcome@123",
-      status: "active",
-    },
-  ]);
+  const [students, setStudents] = useState(() => getStudents());
+
+  // Persist to localStorage so created/edited students survive a page refresh.
+  const persistStudents = (next) => {
+    setStudents(next);
+    saveStudents(next);
+  };
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
   const [newStudent, setNewStudent] = useState({
@@ -85,16 +65,18 @@ function StudentManagement() {
               }
             : student,
         );
-        setStudents(updated);
+        persistStudents(updated);
         alert("Student information updated successfully!");
       } else {
+        const nextId =
+          students.reduce((max, s) => Math.max(max, s.id || 0), 0) + 1;
         const student = {
-          id: students.length + 1,
+          id: nextId,
           ...newStudent,
           password: newStudent.password,
           status: "active",
         };
-        setStudents([...students, student]);
+        persistStudents([...students, student]);
         alert(
           `Student created!\nUsername: ${student.username}\nTemporary Password: ${student.password}`,
         );
@@ -105,7 +87,7 @@ function StudentManagement() {
 
   const handleDeleteStudent = (id) => {
     if (window.confirm("Are you sure you want to suspend this student?")) {
-      setStudents(
+      persistStudents(
         students.map((s) => (s.id === id ? { ...s, status: "suspended" } : s)),
       );
     }
@@ -115,7 +97,7 @@ function StudentManagement() {
     const updated = students.map((student) =>
       student.id === id ? { ...student, password: "Welcome@123" } : student,
     );
-    setStudents(updated);
+    persistStudents(updated);
     const student = updated.find((s) => s.id === id);
     alert(`Password reset for ${student.username}\nNew Password: Welcome@123`);
   };

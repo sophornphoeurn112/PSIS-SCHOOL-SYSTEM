@@ -1,5 +1,35 @@
 const TEACHER_STORAGE_KEY = "psis_teacher_accounts";
 const SCHEDULE_STORAGE_KEY = "psis_schedule_data";
+const STUDENT_STORAGE_KEY = "psis_student_accounts";
+
+const defaultStudents = [
+  {
+    id: 1,
+    schoolId: "STD001",
+    name: "Ali Ahmed",
+    nameKhmer: "អាលី អាហ្មែត",
+    username: "ali123",
+    gender: "Male",
+    dateOfBirth: "2008-06-12",
+    dateJoined: "2022-09-01",
+    phone: "0123456789",
+    password: "Welcome@123",
+    status: "active",
+  },
+  {
+    id: 2,
+    schoolId: "STD002",
+    name: "Fatima Khan",
+    nameKhmer: "ហ្វាទីមា ខាន",
+    username: "fatima456",
+    gender: "Female",
+    dateOfBirth: "2009-03-22",
+    dateJoined: "2023-01-15",
+    phone: "0987654321",
+    password: "Welcome@123",
+    status: "active",
+  },
+];
 
 const defaultTeachers = [
   {
@@ -106,4 +136,21 @@ export const getSchedules = () => {
 
 export const saveSchedules = (schedules) => {
   localStorage.setItem(SCHEDULE_STORAGE_KEY, JSON.stringify(schedules));
+};
+
+export const getStudents = () => {
+  const stored = localStorage.getItem(STUDENT_STORAGE_KEY);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      return defaultStudents;
+    }
+  }
+  localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(defaultStudents));
+  return defaultStudents;
+};
+
+export const saveStudents = (students) => {
+  localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(students));
 };
