@@ -1,0 +1,99 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+  color: white;
+}
+
+.dashboard-header {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.dashboard-header h1 {
+  font-size: 42px;
+  margin: 0 0 10px 0;
+  font-weight: 800;
+}
+
+.dashboard-header p {
+  font-size: 16px;
+  opacity: 0.95;
+  margin: 0;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.functions-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.function-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+
+.function-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.function-card h3 {
+  font-size: 20px;
+  margin: 0 0 16px 0;
+  font-weight: 700;
+  color: #fff;
+}
+
+.function-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.function-card li {
+  padding: 10px 0;
+  font-size: 15px;
+  opacity: 0.9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.function-card li:last-child {
+  border-bottom: none;
+}
+
+.function-card li:before {
+  content: "✓ ";
+  color: #10b981;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.logout-btn {
+  max-width: 200px;
+  margin: 40px auto 0;
+  display: block;
+}
+
+.user-info {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.user-info strong {
+  color: #fbbf24;
+  font-weight: 700;
+}

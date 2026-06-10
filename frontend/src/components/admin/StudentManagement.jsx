@@ -1,0 +1,323 @@
+import React, { useState } from "react";
+import "./AdminManagement.css";
+
+function StudentManagement() {
+  const [students, setStudents] = useState([
+    {
+      id: 1,
+      schoolId: "STD001",
+      name: "Ali Ahmed",
+      nameKhmer: "អាលី អាហិមេត",
+      username: "ali123",
+      gender: "Male",
+      dateOfBirth: "2008-06-12",
+      dateJoined: "2022-09-01",
+      phone: "0123456789",
+      password: "Welcome@123",
+      status: "active",
+    },
+    {
+      id: 2,
+      schoolId: "STD002",
+      name: "Fatima Khan",
+      nameKhmer: "ហ្វាទីមា ខាន",
+      username: "fatima456",
+      gender: "Female",
+      dateOfBirth: "2009-03-22",
+      dateJoined: "2023-01-15",
+      phone: "0987654321",
+      password: "Welcome@123",
+      status: "active",
+    },
+  ]);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingStudentId, setEditingStudentId] = useState(null);
+  const [newStudent, setNewStudent] = useState({
+    schoolId: "",
+    name: "",
+    nameKhmer: "",
+    username: "",
+    gender: "",
+    dateOfBirth: "",
+    dateJoined: "",
+    phone: "",
+    password: "",
+  });
+
+  const resetStudentForm = () => {
+    setNewStudent({
+      schoolId: "",
+      name: "",
+      nameKhmer: "",
+      username: "",
+      gender: "",
+      dateOfBirth: "",
+      dateJoined: "",
+      phone: "",
+      password: "",
+    });
+    setEditingStudentId(null);
+    setShowCreateForm(false);
+  };
+
+  const handleCreateStudent = (e) => {
+    e.preventDefault();
+    const isEditing = Boolean(editingStudentId);
+
+    if (
+      newStudent.schoolId &&
+      newStudent.name &&
+      newStudent.nameKhmer &&
+      newStudent.username &&
+      newStudent.gender &&
+      newStudent.dateOfBirth &&
+      newStudent.dateJoined &&
+      newStudent.phone &&
+      (!isEditing || newStudent.password)
+    ) {
+      if (isEditing) {
+        const updated = students.map((student) =>
+          student.id === editingStudentId
+            ? {
+                ...student,
+                ...newStudent,
+                password: newStudent.password || student.password,
+              }
+            : student,
+        );
+        setStudents(updated);
+        alert("Student information updated successfully!");
+      } else {
+        const student = {
+          id: students.length + 1,
+          ...newStudent,
+          password: newStudent.password,
+          status: "active",
+        };
+        setStudents([...students, student]);
+        alert(
+          `Student created!\nUsername: ${student.username}\nTemporary Password: ${student.password}`,
+        );
+      }
+      resetStudentForm();
+    }
+  };
+
+  const handleDeleteStudent = (id) => {
+    if (window.confirm("Are you sure you want to suspend this student?")) {
+      setStudents(
+        students.map((s) => (s.id === id ? { ...s, status: "suspended" } : s)),
+      );
+    }
+  };
+
+  const handleResetPassword = (id) => {
+    const updated = students.map((student) =>
+      student.id === id ? { ...student, password: "Welcome@123" } : student,
+    );
+    setStudents(updated);
+    const student = updated.find((s) => s.id === id);
+    alert(`Password reset for ${student.username}\nNew Password: Welcome@123`);
+  };
+
+  const handleEditStudent = (student) => {
+    setShowCreateForm(true);
+    setEditingStudentId(student.id);
+    setNewStudent({
+      schoolId: student.schoolId || "",
+      name: student.name,
+      nameKhmer: student.nameKhmer || "",
+      username: student.username,
+      gender: student.gender || "",
+      dateOfBirth: student.dateOfBirth || "",
+      dateJoined: student.dateJoined || "",
+      phone: student.phone || "",
+      password: "",
+    });
+  };
+
+  return (
+    <div className="management-section">
+      <h2>Student Account Management</h2>
+
+      <button
+        className="btn-primary"
+        onClick={() => {
+          if (showCreateForm && editingStudentId) {
+            resetStudentForm();
+          } else {
+            setShowCreateForm(!showCreateForm);
+          }
+        }}
+      >
+        {showCreateForm ? "Cancel" : "+ Create Student Account"}
+      </button>
+
+      {showCreateForm && (
+        <form className="form-container" onSubmit={handleCreateStudent}>
+          <input
+            type="text"
+            placeholder="Student ID"
+            value={newStudent.schoolId}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, schoolId: e.target.value })
+            }
+            required
+          />
+          <input
+            type="text"
+            placeholder="Student Name (English)"
+            value={newStudent.name}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, name: e.target.value })
+            }
+            required
+          />
+          <input
+            type="text"
+            placeholder="Student Name (Khmer)"
+            value={newStudent.nameKhmer}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, nameKhmer: e.target.value })
+            }
+            required
+          />
+          <input
+            type="text"
+            placeholder="Username"
+            value={newStudent.username}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, username: e.target.value })
+            }
+            required
+          />
+          <div className="form-field">
+            <label>Gender</label>
+            <select
+              value={newStudent.gender}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, gender: e.target.value })
+              }
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="form-field">
+            <label>Date of Birth</label>
+            <input
+              type="date"
+              value={newStudent.dateOfBirth}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, dateOfBirth: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Date Joined</label>
+            <input
+              type="date"
+              value={newStudent.dateJoined}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, dateJoined: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={newStudent.phone}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, phone: e.target.value })
+              }
+              required
+            />
+          </div>
+          <input
+            type="password"
+            placeholder={
+              editingStudentId
+                ? "Password (leave blank to keep current)"
+                : "Password"
+            }
+            value={newStudent.password}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, password: e.target.value })
+            }
+            required={!editingStudentId}
+          />
+          <button type="submit" className="btn-success">
+            {editingStudentId ? "Save Changes" : "Create Account"}
+          </button>
+        </form>
+      )}
+
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name (English)</th>
+              <th>Name (Khmer)</th>
+              <th>Username</th>
+              <th>Gender</th>
+              <th>DOB</th>
+              <th>Joined</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((student) => (
+              <tr key={student.id}>
+                <td>{student.schoolId || "—"}</td>
+                <td>{student.name}</td>
+                <td>{student.nameKhmer || "—"}</td>
+                <td>{student.username}</td>
+                <td>{student.gender || "—"}</td>
+                <td>{student.dateOfBirth || "—"}</td>
+                <td>{student.dateJoined || "—"}</td>
+                <td>{student.phone || "—"}</td>
+                <td>
+                  <span className={`status ${student.status}`}>
+                    {student.status}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    className="btn-sm btn-primary"
+                    onClick={() => handleEditStudent(student)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn-sm btn-warning"
+                    onClick={() => handleResetPassword(student.id)}
+                  >
+                    Reset Password
+                  </button>
+                  <button
+                    className="btn-sm btn-danger"
+                    onClick={() => handleDeleteStudent(student.id)}
+                  >
+                    Suspend
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export default StudentManagement;

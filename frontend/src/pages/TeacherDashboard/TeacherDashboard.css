@@ -1,0 +1,346 @@
+.teacher-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #534bae 0%, #7461c2 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-header {
+  padding: 32px 40px 24px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.teacher-header h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.teacher-header .user-info {
+  margin: 8px auto 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+.teacher-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  padding: 24px 40px 40px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+.teacher-sidebar {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 24px;
+  min-height: fit-content;
+}
+
+.teacher-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-weight: 600;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 24px rgba(79, 70, 229, 0.22);
+}
+
+.nav-icon {
+  font-size: 18px;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  color: white;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: auto;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(239, 68, 68, 0.24);
+}
+
+.teacher-content {
+  min-height: 520px;
+}
+
+.content-wrapper {
+  display: grid;
+  gap: 24px;
+}
+
+.section-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+.section-header h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.section-header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.empty-state {
+  padding: 24px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.input-group {
+  display: grid;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  outline: none;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.attendance-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.attendance-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.badge {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.badge.present {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #d1fae5;
+}
+
+.badge.absent {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fee2e2;
+}
+
+.submit-btn {
+  width: fit-content;
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-1px);
+}
+
+.table-wrapper {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.data-table th {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.schedule-grid {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.schedule-grid th,
+.schedule-grid td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px;
+  vertical-align: top;
+}
+
+.schedule-grid th {
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.schedule-cell {
+  min-width: 220px;
+  max-width: 260px;
+}
+
+.schedule-cell-entry {
+  margin-bottom: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.empty-cell {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.inline-message {
+  margin-top: 18px;
+  padding: 14px 18px;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  border-radius: 12px;
+  color: #d1fae5;
+}
+
+.record-summary {
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+@media (max-width: 1024px) {
+  .teacher-layout {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .teacher-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .teacher-header {
+    padding: 24px 18px 18px;
+  }
+
+  .teacher-layout {
+    padding: 16px;
+  }
+
+  .teacher-sidebar {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .teacher-nav {
+    gap: 8px;
+  }
+
+  .nav-item {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .content-wrapper {
+    gap: 20px;
+  }
+}
