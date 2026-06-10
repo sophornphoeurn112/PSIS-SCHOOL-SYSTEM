@@ -51,7 +51,9 @@ function TeacherDashboardPage() {
     >
       <div className="content-wrapper">
         {activeTab === "schedule" && <TeachingSchedule teacherName={user.name} />}
-        {activeTab === "attendance" && <AttendanceTaking />}
+        {activeTab === "attendance" && (
+          <AttendanceTaking teacherName={user.name} />
+        )}
         {activeTab === "grades" && <GradeEntry />}
         {activeTab === "profile" && (
           <ProfileSettings user={user} onSave={handleProfileSave} />

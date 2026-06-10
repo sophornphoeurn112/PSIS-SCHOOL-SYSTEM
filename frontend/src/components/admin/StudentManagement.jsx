@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { getStudents, saveStudents } from "../../services/localStore";
+import {
+  getStudents,
+  saveStudents,
+  GRADE_OPTIONS,
+} from "../../services/localStore";
 import "./AdminManagement.css";
 
 function StudentManagement() {
@@ -18,6 +22,7 @@ function StudentManagement() {
     nameKhmer: "",
     username: "",
     gender: "",
+    studentClass: "",
     dateOfBirth: "",
     dateJoined: "",
     phone: "",
@@ -31,6 +36,7 @@ function StudentManagement() {
       nameKhmer: "",
       username: "",
       gender: "",
+      studentClass: "",
       dateOfBirth: "",
       dateJoined: "",
       phone: "",
@@ -50,6 +56,7 @@ function StudentManagement() {
       newStudent.nameKhmer &&
       newStudent.username &&
       newStudent.gender &&
+      newStudent.studentClass &&
       newStudent.dateOfBirth &&
       newStudent.dateJoined &&
       newStudent.phone &&
@@ -111,6 +118,7 @@ function StudentManagement() {
       nameKhmer: student.nameKhmer || "",
       username: student.username,
       gender: student.gender || "",
+      studentClass: student.studentClass || "",
       dateOfBirth: student.dateOfBirth || "",
       dateJoined: student.dateJoined || "",
       phone: student.phone || "",
@@ -189,6 +197,23 @@ function StudentManagement() {
             </select>
           </div>
           <div className="form-field">
+            <label>Class</label>
+            <select
+              value={newStudent.studentClass}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, studentClass: e.target.value })
+              }
+              required
+            >
+              <option value="">Select Class</option>
+              {GRADE_OPTIONS.map((grade) => (
+                <option key={grade} value={grade}>
+                  {grade}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-field">
             <label>Date of Birth</label>
             <input
               type="date"
@@ -250,6 +275,7 @@ function StudentManagement() {
               <th>Name (Khmer)</th>
               <th>Username</th>
               <th>Gender</th>
+              <th>Class</th>
               <th>DOB</th>
               <th>Joined</th>
               <th>Phone</th>
@@ -265,6 +291,7 @@ function StudentManagement() {
                 <td>{student.nameKhmer || "—"}</td>
                 <td>{student.username}</td>
                 <td>{student.gender || "—"}</td>
+                <td>{student.studentClass || "—"}</td>
                 <td>{student.dateOfBirth || "—"}</td>
                 <td>{student.dateJoined || "—"}</td>
                 <td>{student.phone || "—"}</td>

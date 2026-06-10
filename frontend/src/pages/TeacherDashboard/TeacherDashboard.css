@@ -312,6 +312,93 @@
   color: #475569;
 }
 
+.badge.late {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #92400e;
+}
+
+.badge.permission {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #1e40af;
+}
+
+.class-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.class-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.class-chip:hover {
+  background: #eef2ff;
+}
+
+.class-chip small {
+  font-weight: 500;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.class-chip.active {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.attendance-list {
+  display: grid;
+  gap: 12px;
+}
+
+.attendance-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 1.6fr;
+  gap: 12px;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.attendance-row .student-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.attendance-row select,
+.attendance-row input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .attendance-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 1024px) {
   .teacher-layout {
     grid-template-columns: 1fr;

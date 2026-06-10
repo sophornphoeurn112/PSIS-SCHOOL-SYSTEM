@@ -3,6 +3,7 @@ import {
   getSchedules,
   saveSchedules,
   getTeacherAccounts,
+  GRADE_OPTIONS,
 } from "../../services/localStore";
 import "./AdminManagement.css";
 
@@ -132,15 +133,20 @@ function ScheduleManagement() {
 
       {showCreateForm && (
         <form className="form-container" onSubmit={handleCreateSchedule}>
-          <input
-            type="text"
-            placeholder="Class"
+          <select
             value={newSchedule.class}
             onChange={(e) =>
               setNewSchedule({ ...newSchedule, class: e.target.value })
             }
             required
-          />
+          >
+            <option value="">Select Class</option>
+            {GRADE_OPTIONS.map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}
+              </option>
+            ))}
+          </select>
           <select
             value={newSchedule.teacher}
             onChange={handleTeacherChange}

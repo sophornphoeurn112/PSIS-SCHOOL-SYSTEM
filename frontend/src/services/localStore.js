@@ -2,6 +2,11 @@ const TEACHER_STORAGE_KEY = "psis_teacher_accounts";
 const SCHEDULE_STORAGE_KEY = "psis_schedule_data";
 const STUDENT_STORAGE_KEY = "psis_student_accounts";
 
+export const GRADE_OPTIONS = Array.from(
+  { length: 12 },
+  (_, index) => `Grade ${index + 1}`,
+);
+
 const defaultStudents = [
   {
     id: 1,
@@ -10,6 +15,7 @@ const defaultStudents = [
     nameKhmer: "អាលី អាហ្មែត",
     username: "ali123",
     gender: "Male",
+    studentClass: "Grade 10",
     dateOfBirth: "2008-06-12",
     dateJoined: "2022-09-01",
     phone: "0123456789",
@@ -23,6 +29,7 @@ const defaultStudents = [
     nameKhmer: "ហ្វាទីមា ខាន",
     username: "fatima456",
     gender: "Female",
+    studentClass: "Grade 10",
     dateOfBirth: "2009-03-22",
     dateJoined: "2023-01-15",
     phone: "0987654321",
@@ -69,7 +76,7 @@ const defaultTeachers = [
 const defaultSchedules = [
   {
     id: 1,
-    class: "Class 10A",
+    class: "Grade 10",
     teacher: "Mr. John Smith",
     subject: "Mathematics",
     day: "Monday",
@@ -78,7 +85,7 @@ const defaultSchedules = [
   },
   {
     id: 2,
-    class: "Class 10B",
+    class: "Grade 10",
     teacher: "Ms. Sarah Johnson",
     subject: "English",
     day: "Tuesday",
