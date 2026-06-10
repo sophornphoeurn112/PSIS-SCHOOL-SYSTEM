@@ -35,25 +35,25 @@
 }
 
 .function-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface);
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 28px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
   transition: all 0.3s ease;
 }
 
 .function-card:hover {
-  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: #cbd5e1;
 }
 
 .function-card h3 {
   font-size: 20px;
   margin: 0 0 16px 0;
   font-weight: 700;
-  color: #fff;
+  color: var(--primary-dark);
 }
 
 .function-card ul {
@@ -65,8 +65,8 @@
 .function-card li {
   padding: 10px 0;
   font-size: 15px;
-  opacity: 0.9;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #334155;
+  border-bottom: 1px solid #eef2f7;
 }
 
 .function-card li:last-child {

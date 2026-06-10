@@ -9,6 +9,13 @@ const DEFAULT_USERS = [
     email: "admin@school.com",
   },
   {
+    username: "teacher",
+    password: "Teacher123",
+    role: "teacher",
+    name: "Mr. John Smith",
+    email: "john@school.com",
+  },
+  {
     username: "student",
     password: "Student123",
     role: "student",
