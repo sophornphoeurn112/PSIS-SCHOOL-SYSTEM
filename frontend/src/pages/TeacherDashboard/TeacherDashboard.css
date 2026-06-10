@@ -62,8 +62,8 @@
   border: 2px solid transparent;
   border-radius: 14px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+  color: #334155;
   cursor: pointer;
   transition: all 0.25s ease;
   font-weight: 600;
@@ -71,7 +71,9 @@
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: #eef2f7;
+  color: #0f172a;
+  border-color: #e2e8f0;
 }
 
 .nav-item.active {
