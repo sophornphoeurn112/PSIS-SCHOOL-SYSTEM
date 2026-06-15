@@ -54,7 +54,7 @@ function TeacherDashboardPage() {
         {activeTab === "attendance" && (
           <AttendanceTaking teacherName={user.name} />
         )}
-        {activeTab === "grades" && <GradeEntry />}
+        {activeTab === "grades" && <GradeEntry teacherName={user.name} />}
         {activeTab === "profile" && (
           <ProfileSettings user={user} onSave={handleProfileSave} />
         )}

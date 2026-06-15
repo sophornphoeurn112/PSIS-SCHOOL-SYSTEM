@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import {
   getStudents,
   saveStudents,
-  GRADE_OPTIONS,
+  getClasses,
+  addClass,
 } from "../../services/localStore";
 import "./AdminManagement.css";
 
@@ -17,6 +18,19 @@ function StudentManagement() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
   const [selectedGrade, setSelectedGrade] = useState("All");
+  const [classes, setClasses] = useState(() => getClasses());
+  const [newClassName, setNewClassName] = useState("");
+
+  const handleAddClass = () => {
+    const trimmed = newClassName.trim();
+    if (!trimmed) return;
+    if (classes.includes(trimmed)) {
+      alert("That class already exists.");
+      return;
+    }
+    setClasses(addClass(trimmed));
+    setNewClassName("");
+  };
 
   const countByGrade = (grade) =>
     students.filter((student) => student.studentClass === grade).length;
@@ -233,7 +247,7 @@ function StudentManagement() {
               required
             >
               <option value="">Select Class</option>
-              {GRADE_OPTIONS.map((grade) => (
+              {classes.map((grade) => (
                 <option key={grade} value={grade}>
                   {grade}
                 </option>
@@ -293,6 +307,24 @@ function StudentManagement() {
         </form>
       )}
 
+      <div className="add-class-bar">
+        <input
+          type="text"
+          placeholder="New class name (e.g. Grade 7A)"
+          value={newClassName}
+          onChange={(e) => setNewClassName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAddClass();
+            }
+          }}
+        />
+        <button type="button" className="btn-success" onClick={handleAddClass}>
+          + Add Class
+        </button>
+      </div>
+
       <div className="grade-filter">
         <button
           type="button"
@@ -302,7 +334,7 @@ function StudentManagement() {
           <span className="grade-box-label">All Grades</span>
           <span className="grade-box-count">{students.length}</span>
         </button>
-        {GRADE_OPTIONS.map((grade) => (
+        {classes.map((grade) => (
           <button
             type="button"
             key={grade}

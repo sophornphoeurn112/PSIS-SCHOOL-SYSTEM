@@ -2,6 +2,9 @@ const TEACHER_STORAGE_KEY = "psis_teacher_accounts";
 const SCHEDULE_STORAGE_KEY = "psis_schedule_data";
 const STUDENT_STORAGE_KEY = "psis_student_accounts";
 const STAFF_STORAGE_KEY = "psis_staff_accounts";
+const CLASS_STORAGE_KEY = "psis_classes";
+const ATTENDANCE_STORAGE_KEY = "psis_attendance_records";
+const ACADEMIC_STORAGE_KEY = "psis_academic_records";
 
 export const GRADE_OPTIONS = Array.from(
   { length: 12 },
@@ -203,4 +206,74 @@ export const getStudents = () => {
 
 export const saveStudents = (students) => {
   localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(students));
+};
+
+export const getClasses = () => {
+  const stored = localStorage.getItem(CLASS_STORAGE_KEY);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      return [...GRADE_OPTIONS];
+    }
+  }
+  localStorage.setItem(CLASS_STORAGE_KEY, JSON.stringify(GRADE_OPTIONS));
+  return [...GRADE_OPTIONS];
+};
+
+export const saveClasses = (classes) => {
+  localStorage.setItem(CLASS_STORAGE_KEY, JSON.stringify(classes));
+};
+
+export const addClass = (name) => {
+  const trimmed = (name || "").trim();
+  const classes = getClasses();
+  if (!trimmed || classes.includes(trimmed)) return classes;
+  const next = [...classes, trimmed];
+  saveClasses(next);
+  return next;
+};
+
+export const getAttendanceRecords = () => {
+  const stored = localStorage.getItem(ATTENDANCE_STORAGE_KEY);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      return [];
+    }
+  }
+  return [];
+};
+
+export const saveAttendanceRecords = (records) => {
+  localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(records));
+};
+
+export const addAttendanceRecord = (record) => {
+  const next = [record, ...getAttendanceRecords()];
+  saveAttendanceRecords(next);
+  return next;
+};
+
+export const getAcademicRecords = () => {
+  const stored = localStorage.getItem(ACADEMIC_STORAGE_KEY);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      return [];
+    }
+  }
+  return [];
+};
+
+export const saveAcademicRecords = (records) => {
+  localStorage.setItem(ACADEMIC_STORAGE_KEY, JSON.stringify(records));
+};
+
+export const addAcademicRecord = (record) => {
+  const next = [record, ...getAcademicRecords()];
+  saveAcademicRecords(next);
+  return next;
 };

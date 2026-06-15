@@ -11,8 +11,11 @@ const DAYS = [
   "Sunday",
 ];
 
+const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+
 function TeachingSchedule({ teacherName }) {
   const [schedule, setSchedule] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(today);
 
   useEffect(() => {
     const allSchedules = getSchedules();
@@ -21,6 +24,9 @@ function TeachingSchedule({ teacherName }) {
     );
     setSchedule(filtered);
   }, [teacherName]);
+
+  const visibleDays =
+    selectedDay === "All" ? DAYS : DAYS.filter((day) => day === selectedDay);
 
   const scheduleColumns = [
     ...new Set(schedule.map((item) => `${item.class}|${item.subject}`)),
@@ -45,7 +51,22 @@ function TeachingSchedule({ teacherName }) {
     <div className="section-card">
       <div className="section-header">
         <h2>Teaching Schedule</h2>
-        <p>View the schedule exactly as the admin created it.</p>
+        <p>Showing your schedule for {selectedDay === "All" ? "every day" : selectedDay}.</p>
+      </div>
+
+      <div className="input-group">
+        <label>Day</label>
+        <select
+          value={selectedDay}
+          onChange={(e) => setSelectedDay(e.target.value)}
+        >
+          <option value="All">All Days</option>
+          {DAYS.map((day) => (
+            <option key={day} value={day}>
+              {day}
+            </option>
+          ))}
+        </select>
       </div>
 
       {schedule.length === 0 ? (
@@ -62,7 +83,7 @@ function TeachingSchedule({ teacherName }) {
               </tr>
             </thead>
             <tbody>
-              {DAYS.map((day) => (
+              {visibleDays.map((day) => (
                 <tr key={day}>
                   <th>{day}</th>
                   {scheduleColumns.map((combo) => {

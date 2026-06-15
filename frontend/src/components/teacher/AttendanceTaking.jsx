@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { getSchedules, getStudents } from "../../services/localStore";
+import {
+  getSchedules,
+  getStudents,
+  getAttendanceRecords,
+  addAttendanceRecord,
+} from "../../services/localStore";
 
 const STATUS_OPTIONS = [
   { value: "present", label: "Present" },
@@ -38,7 +43,9 @@ function AttendanceTaking({ teacherName }) {
   );
   const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
   const [attendance, setAttendance] = useState({});
-  const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState(() =>
+    getAttendanceRecords().filter((record) => record.teacher === teacherName),
+  );
 
   const classStudents = useMemo(() => {
     if (!selectedClass) return [];
@@ -81,6 +88,7 @@ function AttendanceTaking({ teacherName }) {
     if (!selectedClass || classStudents.length === 0) return;
     const record = {
       id: Date.now(),
+      teacher: teacherName,
       className: selectedClass,
       date,
       results: classStudents.map((student) => ({
@@ -90,8 +98,9 @@ function AttendanceTaking({ teacherName }) {
         reason: getReason(student.id),
       })),
     };
+    addAttendanceRecord(record);
     setRecords((prev) => [record, ...prev]);
-    alert("Attendance saved successfully!");
+    alert("Attendance saved and sent to admin!");
   };
 
   return (

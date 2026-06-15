@@ -151,6 +151,23 @@
   grid-column: 1 / -1;
 }
 
+.add-class-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.add-class-bar input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+}
+
 .grade-filter {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
