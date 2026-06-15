@@ -1,0 +1,124 @@
+// Maps each localStorage collection key to a Supabase table and the
+// column <-> JS field mapping. Field tuple: [jsField, dbColumn, type].
+// type is one of: 'int' | 'numeric' | 'json' | 'text'.
+// Mirrors the backend collections config so the cloud data shape matches.
+export const COLLECTIONS = {
+  psis_student_accounts: {
+    table: "students",
+    idField: "id",
+    idType: "int",
+    password: { js: "password", col: "password_hash" },
+    fields: [
+      ["id", "id", "int"],
+      ["schoolId", "school_id", "text"],
+      ["name", "name", "text"],
+      ["nameKhmer", "name_khmer", "text"],
+      ["username", "username", "text"],
+      ["gender", "gender", "text"],
+      ["studentClass", "student_class", "text"],
+      ["dateOfBirth", "date_of_birth", "text"],
+      ["dateJoined", "date_joined", "text"],
+      ["phone", "phone", "text"],
+      ["status", "status", "text"],
+    ],
+  },
+  psis_teacher_accounts: {
+    table: "teachers",
+    idField: "id",
+    idType: "int",
+    password: { js: "password", col: "password_hash" },
+    fields: [
+      ["id", "id", "int"],
+      ["schoolId", "school_id", "text"],
+      ["name", "name", "text"],
+      ["nameKhmer", "name_khmer", "text"],
+      ["username", "username", "text"],
+      ["email", "email", "text"],
+      ["subject", "subject", "text"],
+      ["gender", "gender", "text"],
+      ["dateOfBirth", "date_of_birth", "text"],
+      ["dateJoined", "date_joined", "text"],
+      ["phone", "phone", "text"],
+      ["status", "status", "text"],
+      ["role", "role", "text"],
+    ],
+  },
+  psis_staff_accounts: {
+    table: "staff",
+    idField: "id",
+    idType: "int",
+    password: { js: "password", col: "password_hash" },
+    fields: [
+      ["id", "id", "int"],
+      ["schoolId", "school_id", "text"],
+      ["name", "name", "text"],
+      ["nameKhmer", "name_khmer", "text"],
+      ["username", "username", "text"],
+      ["email", "email", "text"],
+      ["position", "position", "text"],
+      ["gender", "gender", "text"],
+      ["dateOfBirth", "date_of_birth", "text"],
+      ["dateJoined", "date_joined", "text"],
+      ["phone", "phone", "text"],
+      ["status", "status", "text"],
+      ["role", "role", "text"],
+    ],
+  },
+  psis_schedule_data: {
+    table: "schedules",
+    idField: "id",
+    idType: "int",
+    fields: [
+      ["id", "id", "int"],
+      ["class", "class_name", "text"],
+      ["teacher", "teacher", "text"],
+      ["subject", "subject", "text"],
+      ["day", "day", "text"],
+      ["time", "time_slot", "text"],
+      ["room", "room", "text"],
+    ],
+  },
+  psis_attendance_records: {
+    table: "attendance_records",
+    idField: "id",
+    idType: "int",
+    fields: [
+      ["id", "id", "int"],
+      ["teacher", "teacher", "text"],
+      ["className", "class_name", "text"],
+      ["date", "date_text", "text"],
+      ["results", "results", "json"],
+    ],
+  },
+  psis_academic_records: {
+    table: "academic_records",
+    idField: "id",
+    idType: "text",
+    fields: [
+      ["id", "id", "text"],
+      ["teacher", "teacher", "text"],
+      ["className", "class_name", "text"],
+      ["subject", "subject", "text"],
+      ["period", "period", "text"],
+      ["student", "student", "text"],
+      ["score", "score", "numeric"],
+      ["maxScore", "max_score", "numeric"],
+      ["grade", "grade", "text"],
+      ["recommendation", "recommendation", "text"],
+      ["date", "date_text", "text"],
+    ],
+  },
+  // Classes are a plain array of strings, handled as a special case.
+  psis_classes: {
+    table: "classes",
+    isStringList: true,
+    column: "name",
+  },
+};
+
+// Account collections expose login credentials (used by authService).
+export const ACCOUNT_COLLECTIONS = [
+  "psis_student_accounts",
+  "psis_teacher_accounts",
+  "psis_staff_accounts",
+];
