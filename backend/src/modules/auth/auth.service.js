@@ -1,12 +1,33 @@
 const userModel = require('../users/user.model');
+const db = require('../../database');
 const { hashPassword, comparePassword } = require('../../utils/password');
 const logger = require('../../utils/logger');
+
+// Account tables that also hold login credentials (created via the dashboards).
+const ACCOUNT_TABLES = [
+  { table: 'teachers', role: 'teacher', extra: 'subject' },
+  { table: 'staff', role: 'staff', extra: 'position' },
+  { table: 'students', role: 'student', extra: null },
+];
+
+const findAccountByUsername = async (username) => {
+  for (const entry of ACCOUNT_TABLES) {
+    const result = await db.query(
+      `SELECT * FROM ${entry.table} WHERE username = $1 LIMIT 1`,
+      [username],
+    );
+    if (result.rows[0]) {
+      return { account: result.rows[0], meta: entry };
+    }
+  }
+  return null;
+};
 
 // Fallback demo credentials used when the database is unavailable or empty,
 // so the app remains usable for development/testing without a running database.
 const DEMO_USERS = {
   admin: { password: 'Admin123', role: 'admin', name: 'Admin' },
-  teacher: { password: 'Teacher123', role: 'teacher', name: 'Mr. John' },
+  teacher: { password: 'Teacher123', role: 'teacher', name: 'Mr. John Smith' },
   staff: { password: 'Staff123', role: 'staff', name: 'Staff Member' },
   student: { password: 'Student123', role: 'student', name: 'John Smith' },
 };
@@ -36,34 +57,59 @@ exports.login = async (credentials) => {
   }
 
   let dbUser;
+  let dbAccount;
   try {
     dbUser = await userModel.findByUsername(username);
+    if (!dbUser) {
+      dbAccount = await findAccountByUsername(username);
+    }
   } catch (error) {
     // Database not reachable – fall back to demo users.
     logger.warn(`Auth DB lookup failed, using demo users: ${error.message}`);
     return loginWithDemoUser(username, password);
   }
 
-  if (!dbUser) {
-    return loginWithDemoUser(username, password);
+  if (dbUser) {
+    const passwordMatches = await comparePassword(password, dbUser.password_hash);
+    if (!passwordMatches) {
+      const error = new Error('Invalid username or password');
+      error.status = 401;
+      throw error;
+    }
+    return {
+      token: buildToken(),
+      user: {
+        username: dbUser.username,
+        role: dbUser.role,
+        name: dbUser.name,
+        email: dbUser.email,
+      },
+    };
   }
 
-  const passwordMatches = await comparePassword(password, dbUser.password_hash);
-  if (!passwordMatches) {
-    const error = new Error('Invalid username or password');
-    error.status = 401;
-    throw error;
+  if (dbAccount) {
+    const { account, meta } = dbAccount;
+    const passwordMatches = account.password_hash
+      ? await comparePassword(password, account.password_hash)
+      : false;
+    if (!passwordMatches) {
+      const error = new Error('Invalid username or password');
+      error.status = 401;
+      throw error;
+    }
+    return {
+      token: buildToken(),
+      user: {
+        username: account.username,
+        role: account.role || meta.role,
+        name: account.name,
+        email: account.email,
+        ...(meta.extra ? { [meta.extra]: account[meta.extra] } : {}),
+      },
+    };
   }
 
-  return {
-    token: buildToken(),
-    user: {
-      username: dbUser.username,
-      role: dbUser.role,
-      name: dbUser.name,
-      email: dbUser.email,
-    },
-  };
+  return loginWithDemoUser(username, password);
 };
 
 exports.register = async (data) => {

@@ -2,6 +2,7 @@ import {
   getTeacherByCredentials,
   getStaffByCredentials,
 } from "./localStore";
+import appConfig from "../config/appConfig";
 
 const DEFAULT_USERS = [
   {
@@ -34,8 +35,40 @@ const DEFAULT_USERS = [
   },
 ];
 
+// Try the backend (database-backed, bcrypt-verified) login first. If the
+// backend/database is unreachable, fall back to the local demo accounts so the
+// browser-only demo still works.
+const loginViaBackend = async (username, password) => {
+  const response = await fetch(`${appConfig.apiUrl}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(body.message || "Invalid username or password");
+    error.handled = true;
+    throw error;
+  }
+  return body;
+};
+
 export const login = async (credentials) => {
   const { username, password } = credentials;
+
+  try {
+    const result = await loginViaBackend(username, password);
+    if (result && result.token && result.user) {
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      return result;
+    }
+  } catch (error) {
+    // If the backend explicitly rejected the credentials, stop here.
+    if (error.handled) throw error;
+    // Otherwise (network/database down) fall through to local demo login.
+  }
+
   const localTeacher = getTeacherByCredentials(username, password);
 
   if (localTeacher) {

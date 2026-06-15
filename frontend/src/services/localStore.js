@@ -1,3 +1,12 @@
+import { pushToBackend } from "./storeSync";
+
+// Writes a collection to localStorage (for instant synchronous reads) and
+// mirrors it to the backend database (best-effort) so data persists.
+const persist = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+  pushToBackend(key, value);
+};
+
 const TEACHER_STORAGE_KEY = "psis_teacher_accounts";
 const SCHEDULE_STORAGE_KEY = "psis_schedule_data";
 const STUDENT_STORAGE_KEY = "psis_student_accounts";
@@ -107,12 +116,12 @@ export const getTeacherAccounts = () => {
       return defaultTeachers;
     }
   }
-  localStorage.setItem(TEACHER_STORAGE_KEY, JSON.stringify(defaultTeachers));
+  persist(TEACHER_STORAGE_KEY, defaultTeachers);
   return defaultTeachers;
 };
 
 export const saveTeacherAccounts = (teachers) => {
-  localStorage.setItem(TEACHER_STORAGE_KEY, JSON.stringify(teachers));
+  persist(TEACHER_STORAGE_KEY, teachers);
 };
 
 export const getTeacherByCredentials = (username, password) => {
@@ -141,12 +150,12 @@ export const getSchedules = () => {
       return defaultSchedules;
     }
   }
-  localStorage.setItem(SCHEDULE_STORAGE_KEY, JSON.stringify(defaultSchedules));
+  persist(SCHEDULE_STORAGE_KEY, defaultSchedules);
   return defaultSchedules;
 };
 
 export const saveSchedules = (schedules) => {
-  localStorage.setItem(SCHEDULE_STORAGE_KEY, JSON.stringify(schedules));
+  persist(SCHEDULE_STORAGE_KEY, schedules);
 };
 
 const defaultStaff = [
@@ -177,12 +186,12 @@ export const getStaffAccounts = () => {
       return defaultStaff;
     }
   }
-  localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(defaultStaff));
+  persist(STAFF_STORAGE_KEY, defaultStaff);
   return defaultStaff;
 };
 
 export const saveStaffAccounts = (staff) => {
-  localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(staff));
+  persist(STAFF_STORAGE_KEY, staff);
 };
 
 export const getStaffByCredentials = (username, password) => {
@@ -200,12 +209,12 @@ export const getStudents = () => {
       return defaultStudents;
     }
   }
-  localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(defaultStudents));
+  persist(STUDENT_STORAGE_KEY, defaultStudents);
   return defaultStudents;
 };
 
 export const saveStudents = (students) => {
-  localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(students));
+  persist(STUDENT_STORAGE_KEY, students);
 };
 
 export const getClasses = () => {
@@ -217,12 +226,12 @@ export const getClasses = () => {
       return [...GRADE_OPTIONS];
     }
   }
-  localStorage.setItem(CLASS_STORAGE_KEY, JSON.stringify(GRADE_OPTIONS));
+  persist(CLASS_STORAGE_KEY, GRADE_OPTIONS);
   return [...GRADE_OPTIONS];
 };
 
 export const saveClasses = (classes) => {
-  localStorage.setItem(CLASS_STORAGE_KEY, JSON.stringify(classes));
+  persist(CLASS_STORAGE_KEY, classes);
 };
 
 export const addClass = (name) => {
@@ -247,7 +256,7 @@ export const getAttendanceRecords = () => {
 };
 
 export const saveAttendanceRecords = (records) => {
-  localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(records));
+  persist(ATTENDANCE_STORAGE_KEY, records);
 };
 
 export const addAttendanceRecord = (record) => {
@@ -269,7 +278,7 @@ export const getAcademicRecords = () => {
 };
 
 export const saveAcademicRecords = (records) => {
-  localStorage.setItem(ACADEMIC_STORAGE_KEY, JSON.stringify(records));
+  persist(ACADEMIC_STORAGE_KEY, records);
 };
 
 export const addAcademicRecord = (record) => {
