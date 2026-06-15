@@ -38,9 +38,7 @@ function AttendanceTaking({ teacherName }) {
     }));
   }, [teacherName]);
 
-  const [selectedClass, setSelectedClass] = useState(
-    teacherClasses[0]?.className || "",
-  );
+  const [selectedClass, setSelectedClass] = useState("");
   const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
   const [attendance, setAttendance] = useState({});
   const [records, setRecords] = useState(() =>
@@ -115,33 +113,43 @@ function AttendanceTaking({ teacherName }) {
           You have no classes assigned yet. Ask the admin to add classes to your
           schedule.
         </div>
+      ) : !selectedClass ? (
+        <div className="input-group">
+          <label>Your Classes — click one to take attendance</label>
+          <div className="class-list">
+            {teacherClasses.map((item) => (
+              <button
+                type="button"
+                key={item.className}
+                className="class-chip"
+                onClick={() => {
+                  setSelectedClass(item.className);
+                  setAttendance({});
+                }}
+              >
+                {item.className}
+                <small>
+                  {item.subject}
+                  {item.days ? ` · ${item.days}` : ""}
+                </small>
+              </button>
+            ))}
+          </div>
+        </div>
       ) : (
         <form className="form-grid" onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Your Classes</label>
-            <div className="class-list">
-              {teacherClasses.map((item) => (
-                <button
-                  type="button"
-                  key={item.className}
-                  className={
-                    selectedClass === item.className
-                      ? "class-chip active"
-                      : "class-chip"
-                  }
-                  onClick={() => {
-                    setSelectedClass(item.className);
-                    setAttendance({});
-                  }}
-                >
-                  {item.className}
-                  <small>
-                    {item.subject}
-                    {item.days ? ` · ${item.days}` : ""}
-                  </small>
-                </button>
-              ))}
-            </div>
+          <div className="selection-bar">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => {
+                setSelectedClass("");
+                setAttendance({});
+              }}
+            >
+              ← Choose another class
+            </button>
+            <h3 className="selection-title">{selectedClass}</h3>
           </div>
 
           <div className="input-group">

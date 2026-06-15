@@ -64,6 +64,7 @@ function GradeEntry({ teacherName }) {
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedPeriod, setSelectedPeriod] = useState("");
+  const [started, setStarted] = useState(false);
   const [entries, setEntries] = useState({});
   const [records, setRecords] = useState(() =>
     getAcademicRecords().filter((record) => record.teacher === teacherName),
@@ -161,8 +162,8 @@ function GradeEntry({ teacherName }) {
           You have no classes assigned yet. Ask the admin to add classes to your
           schedule.
         </div>
-      ) : (
-        <form className="form-grid" onSubmit={handleSubmit}>
+      ) : !started ? (
+        <div className="form-grid">
           <div className="input-group">
             <label>Class</label>
             <select
@@ -213,11 +214,34 @@ function GradeEntry({ teacherName }) {
             </select>
           </div>
 
-          {!readyToEnter ? (
-            <div className="empty-state">
-              Select class, subject, and month/semester to load students.
-            </div>
-          ) : classStudents.length === 0 ? (
+          <button
+            type="button"
+            className="submit-btn"
+            disabled={!readyToEnter}
+            onClick={() => setStarted(true)}
+          >
+            Continue →
+          </button>
+        </div>
+      ) : (
+        <form className="form-grid" onSubmit={handleSubmit}>
+          <div className="selection-bar">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => {
+                setStarted(false);
+                setEntries({});
+              }}
+            >
+              ← Change selection
+            </button>
+            <h3 className="selection-title">
+              {selectedClass} · {selectedSubject} · {selectedPeriod}
+            </h3>
+          </div>
+
+          {classStudents.length === 0 ? (
             <div className="empty-state">
               No students are assigned to {selectedClass} yet.
             </div>
