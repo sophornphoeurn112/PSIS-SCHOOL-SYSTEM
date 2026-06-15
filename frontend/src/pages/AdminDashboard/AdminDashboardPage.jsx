@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getUser, logout } from "../../services/authService";
 import StudentManagement from "../../components/admin/StudentManagement";
 import TeacherManagement from "../../components/admin/TeacherManagement";
+import StaffManagement from "../../components/admin/StaffManagement";
 import ScheduleManagement from "../../components/admin/ScheduleManagement";
 import AttendanceAcademics from "../../components/admin/AttendanceAcademics";
 import SystemSecurity from "../../components/admin/SystemSecurity";
@@ -33,6 +34,7 @@ function AdminDashboardPage() {
   const navItems = [
     { key: "students", label: "Student Management", icon: "👥" },
     { key: "teachers", label: "Teacher Management", icon: "👨‍🏫" },
+    { key: "staff", label: "Staff Management", icon: "🧑‍💼" },
     { key: "schedule", label: "Class Schedule", icon: "📅" },
     { key: "attendance", label: "Attendance & Records", icon: "📊" },
     { key: "security", label: "System Security", icon: "🔒" },
@@ -50,6 +52,7 @@ function AdminDashboardPage() {
       <div className="content-wrapper">
         {activeTab === "students" && <StudentManagement />}
         {activeTab === "teachers" && <TeacherManagement />}
+        {activeTab === "staff" && <StaffManagement />}
         {activeTab === "schedule" && <ScheduleManagement />}
         {activeTab === "attendance" && <AttendanceAcademics />}
         {activeTab === "security" && <SystemSecurity />}

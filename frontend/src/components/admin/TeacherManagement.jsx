@@ -109,6 +109,25 @@ function TeacherManagement() {
     alert(`Password reset for ${username}\nNew Password: Welcome@123`);
   };
 
+  const handleChangePassword = (username) => {
+    const newPassword = window.prompt(
+      `Enter a new password for ${username}:`,
+    );
+    if (newPassword === null) return;
+    if (newPassword.trim().length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
+    const updated = teachers.map((teacher) =>
+      teacher.username === username
+        ? { ...teacher, password: newPassword }
+        : teacher,
+    );
+    setTeachers(updated);
+    saveTeacherAccounts(updated);
+    alert(`Password updated for ${username}\nNew Password: ${newPassword}`);
+  };
+
   const handleEditTeacher = (teacher) => {
     setShowCreateForm(true);
     setEditingTeacherId(teacher.id);
@@ -298,6 +317,12 @@ function TeacherManagement() {
                     onClick={() => handleEditTeacher(teacher)}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="btn-sm btn-success"
+                    onClick={() => handleChangePassword(teacher.username)}
+                  >
+                    Change Password
                   </button>
                   <button
                     className="btn-sm btn-warning"

@@ -119,6 +119,23 @@ function StudentManagement() {
     alert(`Password reset for ${student.username}\nNew Password: Welcome@123`);
   };
 
+  const handleChangePassword = (id) => {
+    const target = students.find((s) => s.id === id);
+    const newPassword = window.prompt(
+      `Enter a new password for ${target?.username || "this student"}:`,
+    );
+    if (newPassword === null) return;
+    if (newPassword.trim().length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
+    const updated = students.map((student) =>
+      student.id === id ? { ...student, password: newPassword } : student,
+    );
+    persistStudents(updated);
+    alert(`Password updated for ${target?.username}\nNew Password: ${newPassword}`);
+  };
+
   const handleEditStudent = (student) => {
     setShowCreateForm(true);
     setEditingStudentId(student.id);
@@ -349,6 +366,12 @@ function StudentManagement() {
                     onClick={() => handleEditStudent(student)}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="btn-sm btn-success"
+                    onClick={() => handleChangePassword(student.id)}
+                  >
+                    Change Password
                   </button>
                   <button
                     className="btn-sm btn-warning"

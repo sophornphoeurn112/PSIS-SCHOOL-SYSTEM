@@ -1,4 +1,7 @@
-import { getTeacherByCredentials } from "./localStore";
+import {
+  getTeacherByCredentials,
+  getStaffByCredentials,
+} from "./localStore";
 
 const DEFAULT_USERS = [
   {
@@ -42,6 +45,22 @@ export const login = async (credentials) => {
       name: localTeacher.name,
       email: localTeacher.email,
       subject: localTeacher.subject,
+    };
+    const token = `local-token-${Date.now()}`;
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    return { token, user };
+  }
+
+  const localStaff = getStaffByCredentials(username, password);
+
+  if (localStaff) {
+    const user = {
+      username: localStaff.username,
+      role: localStaff.role || "staff",
+      name: localStaff.name,
+      email: localStaff.email,
+      position: localStaff.position,
     };
     const token = `local-token-${Date.now()}`;
     localStorage.setItem("token", token);

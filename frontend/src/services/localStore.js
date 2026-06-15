@@ -1,6 +1,7 @@
 const TEACHER_STORAGE_KEY = "psis_teacher_accounts";
 const SCHEDULE_STORAGE_KEY = "psis_schedule_data";
 const STUDENT_STORAGE_KEY = "psis_student_accounts";
+const STAFF_STORAGE_KEY = "psis_staff_accounts";
 
 export const GRADE_OPTIONS = Array.from(
   { length: 12 },
@@ -143,6 +144,48 @@ export const getSchedules = () => {
 
 export const saveSchedules = (schedules) => {
   localStorage.setItem(SCHEDULE_STORAGE_KEY, JSON.stringify(schedules));
+};
+
+const defaultStaff = [
+  {
+    id: 1,
+    schoolId: "STF001",
+    name: "Staff Member",
+    nameKhmer: "បុគ្គលិក",
+    username: "staff",
+    email: "staff@school.com",
+    position: "Office Administrator",
+    gender: "Female",
+    dateOfBirth: "1990-04-18",
+    dateJoined: "2018-03-01",
+    phone: "0112233445",
+    status: "active",
+    role: "staff",
+    password: "Staff123",
+  },
+];
+
+export const getStaffAccounts = () => {
+  const stored = localStorage.getItem(STAFF_STORAGE_KEY);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      return defaultStaff;
+    }
+  }
+  localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(defaultStaff));
+  return defaultStaff;
+};
+
+export const saveStaffAccounts = (staff) => {
+  localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(staff));
+};
+
+export const getStaffByCredentials = (username, password) => {
+  return getStaffAccounts().find(
+    (member) => member.username === username && member.password === password,
+  );
 };
 
 export const getStudents = () => {
