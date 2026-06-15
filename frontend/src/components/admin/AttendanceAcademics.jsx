@@ -87,8 +87,10 @@ function AttendanceAcademics() {
                     <th>Class</th>
                     <th>Student</th>
                     <th>Subject</th>
+                    <th>Period</th>
                     <th>Score</th>
                     <th>Grade</th>
+                    <th>Recommendation</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,7 +101,11 @@ function AttendanceAcademics() {
                       <td>{record.className || "—"}</td>
                       <td>{record.student}</td>
                       <td>{record.subject}</td>
-                      <td>{record.score}</td>
+                      <td>{record.period || "—"}</td>
+                      <td>
+                        {record.score}
+                        {record.maxScore ? ` / ${record.maxScore}` : ""}
+                      </td>
                       <td>
                         <span
                           className={`grade ${
@@ -113,6 +119,7 @@ function AttendanceAcademics() {
                           {record.grade}
                         </span>
                       </td>
+                      <td>{record.recommendation || "—"}</td>
                     </tr>
                   ))}
                 </tbody>
