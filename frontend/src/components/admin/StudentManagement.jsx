@@ -1,43 +1,51 @@
 import React, { useState } from "react";
+import {
+  getStudents,
+  saveStudents,
+  getClasses,
+  addClass,
+} from "../../services/localStore";
 import "./AdminManagement.css";
 
 function StudentManagement() {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      schoolId: "STD001",
-      name: "Ali Ahmed",
-      nameKhmer: "អាលី អាហិមេត",
-      username: "ali123",
-      gender: "Male",
-      dateOfBirth: "2008-06-12",
-      dateJoined: "2022-09-01",
-      phone: "0123456789",
-      password: "Welcome@123",
-      status: "active",
-    },
-    {
-      id: 2,
-      schoolId: "STD002",
-      name: "Fatima Khan",
-      nameKhmer: "ហ្វាទីមា ខាន",
-      username: "fatima456",
-      gender: "Female",
-      dateOfBirth: "2009-03-22",
-      dateJoined: "2023-01-15",
-      phone: "0987654321",
-      password: "Welcome@123",
-      status: "active",
-    },
-  ]);
+  const [students, setStudents] = useState(() => getStudents());
+
+  // Persist to localStorage so created/edited students survive a page refresh.
+  const persistStudents = (next) => {
+    setStudents(next);
+    saveStudents(next);
+  };
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
+  const [selectedGrade, setSelectedGrade] = useState("All");
+  const [classes, setClasses] = useState(() => getClasses());
+  const [newClassName, setNewClassName] = useState("");
+
+  const handleAddClass = () => {
+    const trimmed = newClassName.trim();
+    if (!trimmed) return;
+    if (classes.includes(trimmed)) {
+      alert("That class already exists.");
+      return;
+    }
+    setClasses(addClass(trimmed));
+    setNewClassName("");
+  };
+
+  const countByGrade = (grade) =>
+    students.filter((student) => student.studentClass === grade).length;
+
+  const visibleStudents =
+    selectedGrade === "All"
+      ? students
+      : students.filter((student) => student.studentClass === selectedGrade);
   const [newStudent, setNewStudent] = useState({
     schoolId: "",
     name: "",
     nameKhmer: "",
     username: "",
     gender: "",
+    studentClass: "",
     dateOfBirth: "",
     dateJoined: "",
     phone: "",
@@ -51,6 +59,7 @@ function StudentManagement() {
       nameKhmer: "",
       username: "",
       gender: "",
+      studentClass: "",
       dateOfBirth: "",
       dateJoined: "",
       phone: "",
@@ -70,6 +79,7 @@ function StudentManagement() {
       newStudent.nameKhmer &&
       newStudent.username &&
       newStudent.gender &&
+      newStudent.studentClass &&
       newStudent.dateOfBirth &&
       newStudent.dateJoined &&
       newStudent.phone &&
@@ -85,27 +95,30 @@ function StudentManagement() {
               }
             : student,
         );
-        setStudents(updated);
+        persistStudents(updated);
         alert("Student information updated successfully!");
       } else {
+        const nextId =
+          students.reduce((max, s) => Math.max(max, s.id || 0), 0) + 1;
         const student = {
-          id: students.length + 1,
+          id: nextId,
           ...newStudent,
           password: newStudent.password,
           status: "active",
         };
-        setStudents([...students, student]);
+        persistStudents([...students, student]);
         alert(
           `Student created!\nUsername: ${student.username}\nTemporary Password: ${student.password}`,
         );
       }
+      setSelectedGrade(newStudent.studentClass || "All");
       resetStudentForm();
     }
   };
 
   const handleDeleteStudent = (id) => {
     if (window.confirm("Are you sure you want to suspend this student?")) {
-      setStudents(
+      persistStudents(
         students.map((s) => (s.id === id ? { ...s, status: "suspended" } : s)),
       );
     }
@@ -115,9 +128,26 @@ function StudentManagement() {
     const updated = students.map((student) =>
       student.id === id ? { ...student, password: "Welcome@123" } : student,
     );
-    setStudents(updated);
+    persistStudents(updated);
     const student = updated.find((s) => s.id === id);
     alert(`Password reset for ${student.username}\nNew Password: Welcome@123`);
+  };
+
+  const handleChangePassword = (id) => {
+    const target = students.find((s) => s.id === id);
+    const newPassword = window.prompt(
+      `Enter a new password for ${target?.username || "this student"}:`,
+    );
+    if (newPassword === null) return;
+    if (newPassword.trim().length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
+    const updated = students.map((student) =>
+      student.id === id ? { ...student, password: newPassword } : student,
+    );
+    persistStudents(updated);
+    alert(`Password updated for ${target?.username}\nNew Password: ${newPassword}`);
   };
 
   const handleEditStudent = (student) => {
@@ -129,6 +159,7 @@ function StudentManagement() {
       nameKhmer: student.nameKhmer || "",
       username: student.username,
       gender: student.gender || "",
+      studentClass: student.studentClass || "",
       dateOfBirth: student.dateOfBirth || "",
       dateJoined: student.dateJoined || "",
       phone: student.phone || "",
@@ -207,6 +238,23 @@ function StudentManagement() {
             </select>
           </div>
           <div className="form-field">
+            <label>Class</label>
+            <select
+              value={newStudent.studentClass}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, studentClass: e.target.value })
+              }
+              required
+            >
+              <option value="">Select Class</option>
+              {classes.map((grade) => (
+                <option key={grade} value={grade}>
+                  {grade}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-field">
             <label>Date of Birth</label>
             <input
               type="date"
@@ -259,7 +307,58 @@ function StudentManagement() {
         </form>
       )}
 
+      <div className="add-class-bar">
+        <input
+          type="text"
+          placeholder="New class name (e.g. Grade 7A)"
+          value={newClassName}
+          onChange={(e) => setNewClassName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAddClass();
+            }
+          }}
+        />
+        <button type="button" className="btn-success" onClick={handleAddClass}>
+          + Add Class
+        </button>
+      </div>
+
+      <div className="grade-filter">
+        <button
+          type="button"
+          className={`grade-box ${selectedGrade === "All" ? "active" : ""}`}
+          onClick={() => setSelectedGrade("All")}
+        >
+          <span className="grade-box-label">All Grades</span>
+          <span className="grade-box-count">{students.length}</span>
+        </button>
+        {classes.map((grade) => (
+          <button
+            type="button"
+            key={grade}
+            className={`grade-box ${selectedGrade === grade ? "active" : ""}`}
+            onClick={() => setSelectedGrade(grade)}
+          >
+            <span className="grade-box-label">{grade}</span>
+            <span className="grade-box-count">{countByGrade(grade)}</span>
+          </button>
+        ))}
+      </div>
+
+      <h3 className="grade-heading">
+        {selectedGrade === "All" ? "All Students" : `${selectedGrade} Students`}{" "}
+        ({visibleStudents.length})
+      </h3>
+
       <div className="table-container">
+        {visibleStudents.length === 0 ? (
+          <p className="grade-empty">
+            No students in {selectedGrade === "All" ? "the system" : selectedGrade}{" "}
+            yet. Use “+ Create Student Account” to add one.
+          </p>
+        ) : (
         <table>
           <thead>
             <tr>
@@ -268,6 +367,7 @@ function StudentManagement() {
               <th>Name (Khmer)</th>
               <th>Username</th>
               <th>Gender</th>
+              <th>Class</th>
               <th>DOB</th>
               <th>Joined</th>
               <th>Phone</th>
@@ -276,13 +376,14 @@ function StudentManagement() {
             </tr>
           </thead>
           <tbody>
-            {students.map((student) => (
+            {visibleStudents.map((student) => (
               <tr key={student.id}>
                 <td>{student.schoolId || "—"}</td>
                 <td>{student.name}</td>
                 <td>{student.nameKhmer || "—"}</td>
                 <td>{student.username}</td>
                 <td>{student.gender || "—"}</td>
+                <td>{student.studentClass || "—"}</td>
                 <td>{student.dateOfBirth || "—"}</td>
                 <td>{student.dateJoined || "—"}</td>
                 <td>{student.phone || "—"}</td>
@@ -297,6 +398,12 @@ function StudentManagement() {
                     onClick={() => handleEditStudent(student)}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="btn-sm btn-success"
+                    onClick={() => handleChangePassword(student.id)}
+                  >
+                    Change Password
                   </button>
                   <button
                     className="btn-sm btn-warning"
@@ -315,6 +422,7 @@ function StudentManagement() {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,104 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #0b5cff 0%, #0849c7 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(8, 73, 199, 0.25);
+  padding: 32px;
+  animation: slideUp 0.35s ease-out;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.login-logo {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.login-card h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.login-subtitle {
+  margin: 2px 0 0;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* The shared form styles add a card background; flatten it inside login-card. */
+.login-card form {
+  box-shadow: none;
+  padding: 0;
+  max-width: none;
+  animation: none;
+}
+
+.login-error {
+  margin-top: 14px;
+}
+
+.demo-box {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(15, 23, 42, 0.12);
+}
+
+.demo-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.demo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.demo-chip {
+  width: auto;
+  margin: 0;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: var(--primary-light);
+  box-shadow: none;
+  border-radius: 999px;
+}
+
+.demo-chip:hover {
+  transform: translateY(-1px);
+  background: #d6e6ff;
+  box-shadow: none;
+}

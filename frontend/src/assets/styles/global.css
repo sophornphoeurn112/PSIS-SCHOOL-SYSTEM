@@ -133,13 +133,7 @@ button:active {
 }
 
 p {
-  margin: 18px 0 0;
-  padding: 12px 16px;
-  background: #fee2e2;
-  border-left: 4px solid var(--danger);
-  border-radius: 8px;
-  color: #991b1b;
-  font-size: 14px;
+  margin: 0;
   line-height: 1.5;
 }
 

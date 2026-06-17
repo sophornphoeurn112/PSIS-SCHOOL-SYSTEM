@@ -114,7 +114,8 @@
 .form-container label {
   display: block;
   margin-bottom: 6px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #475569;
+  font-weight: 600;
   font-size: 13px;
 }
 
@@ -124,13 +125,13 @@
 }
 
 .form-container select {
-  background: rgba(255, 255, 255, 0.12);
-  color: white;
+  background: #ffffff;
+  color: var(--text);
 }
 
 .form-container select option {
-  background: #1e293b;
-  color: white;
+  background: #ffffff;
+  color: var(--text);
 }
 
 .form-container input::placeholder {
@@ -148,6 +149,88 @@
 
 .form-container button {
   grid-column: 1 / -1;
+}
+
+.add-class-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.add-class-bar input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.grade-filter {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.grade-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.grade-box:hover {
+  border-color: var(--primary-dark);
+  background: #eef2ff;
+}
+
+.grade-box.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(102, 126, 234, 0.28);
+}
+
+.grade-box-label {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.grade-box-count {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  color: #334155;
+}
+
+.grade-box.active .grade-box-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.grade-heading {
+  margin: 22px 0 4px;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.grade-empty {
+  padding: 18px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  color: #64748b;
 }
 
 .table-container {
@@ -190,13 +273,14 @@ table tbody tr:hover {
 
 .schedule-grid th,
 .schedule-grid td {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #e2e8f0;
   padding: 18px;
   vertical-align: top;
 }
 
 .schedule-grid th {
-  background: rgba(255, 255, 255, 0.08);
+  background: #f1f5f9;
+  color: #0f172a;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -210,16 +294,17 @@ table tbody tr:hover {
   margin-bottom: 12px;
   padding: 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #eef2ff;
+  color: #1e293b;
 }
 
 .empty-cell {
-  color: rgba(255, 255, 255, 0.55);
+  color: #94a3b8;
 }
 
 .form-note {
   grid-column: 1 / -1;
-  color: rgba(255, 255, 255, 0.75);
+  color: #64748b;
   margin-top: 8px;
 }
 
@@ -288,10 +373,11 @@ table tbody tr:hover {
 }
 
 .records-box {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px;
+  color: #0f172a;
 }
 
 .records-box h3 {
@@ -306,10 +392,11 @@ table tbody tr:hover {
 }
 
 .info-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px;
+  color: #0f172a;
 }
 
 .info-card h3 {
@@ -325,11 +412,12 @@ table tbody tr:hover {
 }
 
 .permissions-container {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px;
   overflow-x: auto;
+  color: #0f172a;
 }
 
 .permissions-table th,
@@ -356,8 +444,8 @@ table tbody tr:hover {
 }
 
 .permission-badge {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.5);
+  background: #e2e8f0;
+  color: #64748b;
 }
 
 @media (max-width: 768px) {

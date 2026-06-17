@@ -3,6 +3,8 @@ import {
   getSchedules,
   saveSchedules,
   getTeacherAccounts,
+  getClasses,
+  addClass,
 } from "../../services/localStore";
 import "./AdminManagement.css";
 
@@ -19,6 +21,8 @@ const DAYS = [
 function ScheduleManagement() {
   const [schedules, setSchedules] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  const [classes, setClasses] = useState(() => getClasses());
+  const [newClassName, setNewClassName] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newSchedule, setNewSchedule] = useState({
     class: "",
@@ -109,6 +113,25 @@ function ScheduleManagement() {
     }
   };
 
+  const handleAddClass = () => {
+    const trimmed = newClassName.trim();
+    if (!trimmed) return;
+    if (classes.includes(trimmed)) {
+      alert("That class already exists.");
+      return;
+    }
+    setClasses(addClass(trimmed));
+    setNewClassName("");
+  };
+
+  const countByClass = (className) =>
+    schedules.filter((schedule) => schedule.class === className).length;
+
+  const handlePickClass = (className) => {
+    setNewSchedule((prev) => ({ ...prev, class: className }));
+    setShowCreateForm(true);
+  };
+
   const handleTeacherChange = (event) => {
     const teacherName = event.target.value;
     const teacher = teachers.find((item) => item.name === teacherName);
@@ -123,24 +146,68 @@ function ScheduleManagement() {
     <div className="management-section">
       <h2>Class Schedule Management</h2>
 
-      <button
-        className="btn-primary"
-        onClick={() => setShowCreateForm(!showCreateForm)}
-      >
-        {showCreateForm ? "Cancel" : "+ Create Schedule"}
-      </button>
+      <div className="add-class-bar">
+        <input
+          type="text"
+          placeholder="New class name (e.g. Grade 7A)"
+          value={newClassName}
+          onChange={(e) => setNewClassName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAddClass();
+            }
+          }}
+        />
+        <button type="button" className="btn-success" onClick={handleAddClass}>
+          + Add Class
+        </button>
+      </div>
+
+      <p className="form-note">
+        Click a class to create a schedule for it.
+      </p>
+      <div className="grade-filter">
+        {classes.map((className) => (
+          <button
+            type="button"
+            key={className}
+            className={`grade-box ${
+              newSchedule.class === className && showCreateForm ? "active" : ""
+            }`}
+            onClick={() => handlePickClass(className)}
+          >
+            <span className="grade-box-label">{className}</span>
+            <span className="grade-box-count">{countByClass(className)}</span>
+          </button>
+        ))}
+      </div>
+
+      {showCreateForm && (
+        <button
+          className="btn-primary"
+          onClick={() => setShowCreateForm(false)}
+        >
+          Cancel
+        </button>
+      )}
 
       {showCreateForm && (
         <form className="form-container" onSubmit={handleCreateSchedule}>
-          <input
-            type="text"
-            placeholder="Class"
+          <select
             value={newSchedule.class}
             onChange={(e) =>
               setNewSchedule({ ...newSchedule, class: e.target.value })
             }
             required
-          />
+          >
+            <option value="">Select Class</option>
+            {classes.map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}
+              </option>
+            ))}
+          </select>
           <select
             value={newSchedule.teacher}
             onChange={handleTeacherChange}

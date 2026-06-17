@@ -1,131 +1,130 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  getAttendanceRecords,
+  getAcademicRecords,
+} from "../../services/localStore";
 import "./AdminManagement.css";
 
 function AttendanceAcademics() {
-  const [attendanceRecords, setAttendanceRecords] = useState([
-    {
-      id: 1,
-      student: "Ali Ahmed",
-      class: "10A",
-      present: 45,
-      absent: 5,
-      percentage: "90%",
-    },
-    {
-      id: 2,
-      student: "Fatima Khan",
-      class: "10A",
-      present: 48,
-      absent: 2,
-      percentage: "96%",
-    },
-    {
-      id: 3,
-      student: "Hassan Ali",
-      class: "10B",
-      present: 40,
-      absent: 10,
-      percentage: "80%",
-    },
-  ]);
+  const [attendanceRows, setAttendanceRows] = useState([]);
+  const [academicRecords, setAcademicRecords] = useState([]);
 
-  const [academicRecords, setAcademicRecords] = useState([
-    {
-      id: 1,
-      student: "Ali Ahmed",
-      subject: "Mathematics",
-      marks: 85,
-      grade: "A",
-      status: "Excellent",
-    },
-    {
-      id: 2,
-      student: "Fatima Khan",
-      subject: "English",
-      marks: 92,
-      grade: "A+",
-      status: "Outstanding",
-    },
-    {
-      id: 3,
-      student: "Hassan Ali",
-      subject: "Mathematics",
-      marks: 72,
-      grade: "B",
-      status: "Good",
-    },
-  ]);
+  useEffect(() => {
+    const rows = getAttendanceRecords().flatMap((record) =>
+      record.results.map((item) => ({
+        key: `${record.id}-${item.id}`,
+        date: record.date,
+        teacher: record.teacher,
+        className: record.className,
+        student: item.name,
+        status: item.status,
+        reason: item.reason,
+      })),
+    );
+    setAttendanceRows(rows);
+    setAcademicRecords(getAcademicRecords());
+  }, []);
 
   return (
     <div className="management-section">
       <h2>Attendance & Academic Records Monitoring</h2>
+      <p className="form-note">
+        These records are submitted by teachers from their dashboard.
+      </p>
 
       <div className="records-container">
         <div className="records-box">
-          <h3>Attendance Records</h3>
+          <h3>Attendance Records ({attendanceRows.length})</h3>
           <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Class</th>
-                  <th>Present Days</th>
-                  <th>Absent Days</th>
-                  <th>Attendance %</th>
-                </tr>
-              </thead>
-              <tbody>
-                {attendanceRecords.map((record) => (
-                  <tr key={record.id}>
-                    <td>{record.student}</td>
-                    <td>{record.class}</td>
-                    <td>{record.present}</td>
-                    <td>{record.absent}</td>
-                    <td>
-                      <span
-                        className={`percentage ${record.percentage === "90%" || record.percentage === "96%" ? "high" : "medium"}`}
-                      >
-                        {record.percentage}
-                      </span>
-                    </td>
+            {attendanceRows.length === 0 ? (
+              <p className="grade-empty">
+                No attendance submitted by teachers yet.
+              </p>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Teacher</th>
+                    <th>Class</th>
+                    <th>Student</th>
+                    <th>Status</th>
+                    <th>Reason</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {attendanceRows.map((row) => (
+                    <tr key={row.key}>
+                      <td>{row.date}</td>
+                      <td>{row.teacher || "—"}</td>
+                      <td>{row.className}</td>
+                      <td>{row.student}</td>
+                      <td>
+                        <span className={`status ${row.status}`}>
+                          {row.status}
+                        </span>
+                      </td>
+                      <td>{row.reason || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
 
         <div className="records-box">
-          <h3>Academic Records</h3>
+          <h3>Academic Records ({academicRecords.length})</h3>
           <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Subject</th>
-                  <th>Marks</th>
-                  <th>Grade</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {academicRecords.map((record) => (
-                  <tr key={record.id}>
-                    <td>{record.student}</td>
-                    <td>{record.subject}</td>
-                    <td>{record.marks}</td>
-                    <td>
-                      <span
-                        className={`grade ${record.grade === "A+" ? "excellent" : record.grade === "A" ? "good" : "average"}`}
-                      >
-                        {record.grade}
-                      </span>
-                    </td>
-                    <td>{record.status}</td>
+            {academicRecords.length === 0 ? (
+              <p className="grade-empty">No scores submitted by teachers yet.</p>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Teacher</th>
+                    <th>Class</th>
+                    <th>Student</th>
+                    <th>Subject</th>
+                    <th>Period</th>
+                    <th>Score</th>
+                    <th>Grade</th>
+                    <th>Recommendation</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {academicRecords.map((record) => (
+                    <tr key={record.id}>
+                      <td>{record.date || "—"}</td>
+                      <td>{record.teacher || "—"}</td>
+                      <td>{record.className || "—"}</td>
+                      <td>{record.student}</td>
+                      <td>{record.subject}</td>
+                      <td>{record.period || "—"}</td>
+                      <td>
+                        {record.score}
+                        {record.maxScore ? ` / ${record.maxScore}` : ""}
+                      </td>
+                      <td>
+                        <span
+                          className={`grade ${
+                            record.grade === "A"
+                              ? "excellent"
+                              : record.grade === "B"
+                                ? "good"
+                                : "average"
+                          }`}
+                        >
+                          {record.grade}
+                        </span>
+                      </td>
+                      <td>{record.recommendation || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
